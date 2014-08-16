@@ -1,0 +1,5 @@
+app/etc/modules/Danjulf_Respizr.xml
+app/code/community/Danjulf/Respizr
+app/design/frontend/base/default/layout/respizr.xml
+app/design/frontend/base/default/template/respizr
+js/picturePolyfill.min.js

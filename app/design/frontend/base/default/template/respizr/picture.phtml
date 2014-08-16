@@ -1,0 +1,55 @@
+<?php
+/**
+ * Danjulf_Respizr (Responsive Image Resizer)
+ *
+ * Copyright (C) 2014 Daniel Bergstrom (danjulf@gmail.com)
+ *
+ * This file is part of Danjulf_Respizr.
+ *
+ * Danjulf_Respizr is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Danjulf_Respizr is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Danjulf_Respizr. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @category  Danjulf
+ * @package   Danjulf_Respizr
+ * @author    Daniel Bergstrom <danjulf@gmail.com>
+ * @copyright 2014 Daniel Bergstrom (danjulf@gmail.com)
+ * @license   http://www.gnu.org/licenses/lgpl.html GNU LGPL
+ */
+
+$alt                    = $this->getAlt();
+$images                 = $this->getImages();
+$smallestImg            = $this->getSmallestImg();
+$largestImg             = $this->getLargestImg();
+
+?>
+
+<picture data-alt="<?php echo $alt; ?>" data-default-src="<?php echo $largestImg['image_url']; ?>">
+    <?php foreach ($images as $breakpoint => $image): ?>
+        <source
+            media="(min-width: <?php echo $breakpoint; ?>px)"
+            <?php if (isset($image['image_url_2x'])): // If retina ?>
+                srcset="<?php echo $image['image_url']; ?>, <?php echo $image['image_url_2x']; ?> 2x"
+            <?php else: ?>
+                src="<?php echo $image['image_url']; ?>"
+            <?php endif; ?>
+             />
+    <?php endforeach; ?>
+    <source
+        <?php if (isset($smallestImg['image_url_2x'])): // If retina ?>
+            srcset="<?php echo $smallestImg['image_url']; ?>, <?php echo $smallestImg['image_url_2x']; ?> 2x"
+        <?php else: ?>
+            src="<?php echo $smallestImg['image_url']; ?>"
+        <?php endif; ?>
+        />
+    <img src="<?php echo $largestImg['image_url']; ?>" alt="<?php echo $alt; ?>" />
+</picture>
