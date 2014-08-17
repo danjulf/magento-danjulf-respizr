@@ -2,6 +2,8 @@ Danjulf_Respizr
 ===============
 Responsive image resizer, a magento module to help develop responsive Magento themes. It allows resizing of any uploaded image by simply providing the url. It uses Andrea Verlicchis awesome [picturePolyfill](https://github.com/verlok/picturePolyfill) to provide responsive images.
 
+Thanks to Aijko for help with the [image-chooser](https://github.com/aijko/aijko-widgetimagechooser) for the widget
+
 Usage
 -----
 In your .phtml-files simply call the helper and provide an image url, description and size:
