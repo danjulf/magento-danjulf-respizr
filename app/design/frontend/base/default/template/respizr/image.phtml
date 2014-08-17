@@ -28,10 +28,6 @@
 
 $alt    = $this->getAlt();
 $image  = $this->getImage();
-$width  = $this->getWidth();
-$width  = $this->getHeight();
-
 ?>
 
-<img src="<?php $image ?>" width="<?php echo $width; ?>"
-    <?php if (!empty($height)) echo 'height="' . $height . '" '?> />
+<img src="<?php echo $image ?>" alt="<?php echo $alt; ?>" />
