@@ -27,31 +27,31 @@
  */
 
 require_once implode(DS, array(
-    'Mage', 'Adminhtml', 'controllers', 'CacheController.php'
+    'Mage', 'Adminhtml', 'controllers', 'Cms', 'Wysiwyg', 'ImagesController.php'
 ));
 
-class Danjulf_Respizr_CacheController extends Mage_Adminhtml_CacheController
+class Danjulf_Respizr_Adminhtml_Cms_Wysiwyg_ImagesController
+    extends Mage_Adminhtml_Cms_Wysiwyg_ImagesController
 {
 
     /**
-     * Clean image files cache
+     * Fire when an Image is selected
      */
-    public function cleanImagesAction()
+    public function onInsertAction()
     {
-        parent::cleanImagesAction();
-        $this->clearRespizrImageCache();
+        $helper = Mage::helper('cms/wysiwyg_images');
+        $storeId = $this->getRequest()->getParam('store');
+
+        $filename = $this->getRequest()->getParam('filename');
+        $filename = $helper->idDecode($filename);
+
+        Mage::helper('catalog')->setStoreId($storeId);
+        $helper->setStoreId($storeId);
+
+        $fileUrl = $helper->getCurrentUrl() . $filename;
+        $mediaPath = str_replace(Mage::getBaseUrl('media'), '', $fileUrl);
+
+        $this->getResponse()->setBody($mediaPath);
     }
 
-    /**
-     * Clears all images in "resized" folder
-     */
-    public function clearRespizrImageCache()
-    {
-        $mediaPath = Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA);
-        $resizedDirPath = $mediaPath . DS . Mage::getSingleton('respizr/config')->getRespizrDirName();
-        if (is_dir($resizedDirPath)) {
-            $io = new Varien_Io_File();
-            $io->rmdir($resizedDirPath, true);
-        }
-    }
 }

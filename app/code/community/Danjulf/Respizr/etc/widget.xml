@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<widgets>
+    <widget_picture type="respizr/widget_picture" translate="name description" module="respizr">
+        <name>Responsive Image</name>
+        <description>Inserts a responsive image</description>
+        <parameters>
+            <image translate="label">
+                <label>Image</label>
+                <description>Promotion image</description>
+                <visible>1</visible>
+                <required>1</required>
+                <type>respizr/adminhtml_widget_form_renderer_fieldset_image</type>
+            </image>
+            <alt translate="label">
+                <label>Description</label>
+                <type>text</type>
+                <visible>1</visible>
+                <required>0</required>
+            </alt>
+            <max_width translate="label">
+                <label>Max Width</label>
+                <type>text</type>
+                <visible>1</visible>
+                <required>0</required>
+            </max_width>
+        </parameters>
+    </widget_picture>
+</widgets>

@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Danjulf_Respizr (Responsive Image Resizer)
+ *
+ * Copyright (C) 2014 Daniel Bergstrom (danjulf@gmail.com)
+ *
+ * This file is part of Danjulf_Respizr.
+ *
+ * Danjulf_Respizr is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Danjulf_Respizr is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Danjulf_Respizr. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @category  Danjulf
+ * @package   Danjulf_Respizr
+ * @author    Daniel Bergstrom <danjulf@gmail.com>
+ * @copyright 2014 Daniel Bergstrom (danjulf@gmail.com)
+ * @license   http://www.gnu.org/licenses/lgpl.html GNU LGPL
+ */
+-->
+<layout>
+    <adminhtml_widget_instance_edit>
+        <reference name="head">
+            <action method="addJs"><script>lib/flex.js</script></action>
+            <action method="addJs"><script>lib/FABridge.js</script></action>
+            <action method="addJs"><script>mage/adminhtml/flexuploader.js</script></action>
+            <action method="addJs"><script>mage/adminhtml/browser.js</script></action>
+        </reference>
+    </adminhtml_widget_instance_edit>
+
+    <adminhtml_cms_wysiwyg_image_index>
+        <remove name="footer" />
+        <remove name="head" />
+        <reference name="left">
+            <block name="wysiwyg_images.js" type="adminhtml/cms_wysiwyg_images_content" template="cms/browser/js.phtml" />
+            <block name="wysiwyg_images.tree" type="adminhtml/cms_wysiwyg_images_tree" template="cms/browser/tree.phtml" />
+        </reference>
+        <reference name="content">
+            <block name="wysiwyg_images.content"  type="adminhtml/cms_wysiwyg_images_content" template="cms/browser/content.phtml">
+                <block name="wysiwyg_images.uploader" type="adminhtml/cms_wysiwyg_images_content_uploader" template="cms/browser/content/uploader.phtml" />
+                <block name="wysiwyg_images.newfolder" type="adminhtml/cms_wysiwyg_images_content_newfolder" template="cms/browser/content/newfolder.phtml" />
+            </block>
+        </reference>
+    </adminhtml_cms_wysiwyg_image_index>
+
+    <adminhtml_cms_wysiwyg_image_contents>
+        <block name="wysiwyg_images.files" type="adminhtml/cms_wysiwyg_images_content_files" template="cms/browser/content/files.phtml" output="toHtml" />
+    </adminhtml_cms_wysiwyg_image_contents>
+
+</layout>

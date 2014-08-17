@@ -31,11 +31,16 @@
 
     <modules>
         <Danjulf_Respizr>
-            <version>0.0.1</version>
+            <version>0.0.2</version>
         </Danjulf_Respizr>
     </modules>
 
     <global>
+        <blocks>
+            <respizr>
+                <class>Danjulf_Respizr_Block</class>
+            </respizr>
+        </blocks>
         <helpers>
             <respizr>
                 <class>Danjulf_Respizr_Helper</class>
@@ -63,12 +68,21 @@
             <adminhtml>
                 <args>
                     <modules>
-                        <Danjulf_Respizr before="Mage_Adminhtml">Danjulf_Respizr</Danjulf_Respizr>
+                        <respizr before="Mage_Adminhtml">Danjulf_Respizr_Adminhtml</respizr>
                     </modules>
                 </args>
             </adminhtml>
         </routers>
     </admin>
+    <adminhtml>
+        <layout>
+            <updates>
+                <respizr>
+                    <file>respizr.xml</file>
+                </respizr>
+            </updates>
+        </layout>
+    </adminhtml>
 
     <default>
         <respizr>
