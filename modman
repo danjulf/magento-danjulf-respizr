@@ -2,4 +2,6 @@ app/etc/modules/Danjulf_Respizr.xml
 app/code/community/Danjulf/Respizr
 app/design/frontend/base/default/layout/respizr.xml
 app/design/frontend/base/default/template/respizr
+app/design/adminhtml/default/default/layout/respizr.xml
+skin/adminhtml/default/default/images/widget/respizr__widget_picture.gif
 js/picturePolyfill.min.js
