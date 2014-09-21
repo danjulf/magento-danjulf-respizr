@@ -31,6 +31,7 @@ class Danjulf_Respizr_Model_Config
     const RESPIZR_DIR_NAME      = 'resized';
     const RESPIZR_BREAKPOINTS   = 'respizr/general/breakpoints';
     const RESPIZR_RETINA        = 'respizr/general/retina';
+    const RESPIZR_OFFSETS       = 'respizr/general/layout_offsets';
 
     /**
      * Retrieve directory name for resized images
@@ -63,5 +64,21 @@ class Danjulf_Respizr_Model_Config
         $breakpoints = array_map('trim', $breakpoints);
         arsort($breakpoints);
         return $breakpoints;
+    }
+
+    /**
+     * Get breakpoint offsets by layout code
+     *
+     * @param string $layoutCode
+     * @param Mage_Core_Model_Store $store
+     * @return array
+     */
+    public function getRespizrOffsets($layoutCode, $store = null)
+    {
+        $value = Mage::getStoreConfig(self::RESPIZR_OFFSETS, $store);
+        $offsets = @unserialize($value);
+        return is_array($offsets) && isset ($offsets[$layoutCode])
+            ? $offsets[$layoutCode]
+            : array();
     }
 }

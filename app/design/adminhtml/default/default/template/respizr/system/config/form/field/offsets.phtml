@@ -1,0 +1,78 @@
+<?php
+/**
+ * Danjulf_Respizr (Responsive Image Resizer)
+ *
+ * Copyright (C) 2014 Daniel Bergstrom (danjulf@gmail.com)
+ *
+ * This file is part of Danjulf_Respizr.
+ *
+ * Danjulf_Respizr is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Danjulf_Respizr is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Danjulf_Respizr. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @category  Danjulf
+ * @package   Danjulf_Respizr
+ * @author    Henrik Hedelund <henke.hedelund@gmail.com>
+ * @copyright 2014 Daniel Bergstrom (danjulf@gmail.com)
+ * @license   http://www.gnu.org/licenses/lgpl.html GNU LGPL
+ */
+?>
+<?php /* @var $this Danjulf_Respizr_Block_Adminhtml_System_Config_Form_Field_Offsets */ ?>
+<?php
+$_htmlId = $this->getHtmlId() ? $this->getHtmlId() : '_' . uniqid();
+$_disabled = $this->getElement()->getDisabled();
+?>
+<div class="grid" id="grid<?php echo $_htmlId ?>">
+    <table cellpadding="0" cellspacing="0" id="table<?php echo $_htmlId ?>">
+        <thead>
+            <tr class="headings" id="headings<?php echo $_htmlId ?>">
+                <th><?php echo $this->__('Layout'); ?></th>
+                <th><?php echo $this->__('Breakpoint'); ?></th>
+                <th class="last"><?php echo $this->__('Offset'); ?></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($this->getOffsets() as $layoutCode => $offsets): ?>
+                <?php $i = 0; foreach ($offsets as $breakpoint => $offset): ?>
+                <tr>
+                    <?php if ($i == 0): ?>
+                    <td class="nowrap" rowspan="<?php echo count($offsets); ?>)">
+                        <?php echo $this->getLayoutLabel($layoutCode); ?>
+                    </td>
+                    <?php endif; ?>
+                    <td class="a-right">
+                        <?php echo $breakpoint; ?>px
+                    </td>
+                    <td>
+                        <input type="text"
+                               class="input-text"
+                               name="<?php echo $this->getInputName($layoutCode, $breakpoint); ?>"
+                               value="<?php echo $offset; ?>"
+                               <?php if ($_disabled): ?>
+                               disabled="disabled"
+                               <?php endif; ?> />
+                    </td>
+                </tr>
+                <?php ++$i; endforeach; ?>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+<script type="text/javascript">
+//<![CDATA[
+(function (tableName) {
+    if (typeof window.decorateTable == 'function') {
+        window.decorateTable(tableName);
+    }
+})('table<?php echo $_htmlId ?>');
+//]]>
+</script>

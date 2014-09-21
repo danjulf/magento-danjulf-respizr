@@ -89,6 +89,7 @@
             <general>
                 <retina>1</retina>
                 <breakpoints><![CDATA[1200, 960]]></breakpoints>
+                <layout_offsets></layout_offsets>
             </general>
         </respizr>
     </default>

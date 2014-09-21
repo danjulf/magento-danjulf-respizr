@@ -64,6 +64,16 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </breakpoints>
+                        <layout_offsets translate="label comment" module="respizr">
+                            <label>Layout Offsets</label>
+                            <breakpoints_field>respizr/general/breakpoints</breakpoints_field>
+                            <frontend_model>respizr/adminhtml_system_config_form_field_offsets</frontend_model>
+                            <backend_model>respizr/adminhtml_system_config_backend_offsets</backend_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </layout_offsets>
                     </fields>
                 </general>
             </groups>
