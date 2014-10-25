@@ -35,7 +35,7 @@ class Danjulf_Respizr_Helper_Data extends Mage_Core_Helper_Abstract
      * @param string $originalUrl
      * @param int $width
      * @param int $height
-     * @return mixed
+     * @return string|false
      */
     public function resizeImg($originalUrl, $width, $height = null)
     {
@@ -87,7 +87,7 @@ class Danjulf_Respizr_Helper_Data extends Mage_Core_Helper_Abstract
      *
      * @param array $rConfig
      * @param string $imageUrl
-     * @return mixed
+     * @return array|false
      */
     public function resizeImages($rConfig, $imageUrl)
     {
@@ -97,8 +97,11 @@ class Danjulf_Respizr_Helper_Data extends Mage_Core_Helper_Abstract
         $images = array();
 
         foreach ($rConfig['breakpoints'] as $breakpoint) {
-            $_width = intval($breakpoint * $rConfig['multiplier']
-                + $rConfig['offsets'][$breakpoint]);
+
+            $_width = intval($breakpoint * $rConfig['multiplier']);
+            if (array_key_exists($breakpoint, $rConfig['offsets'])){
+                $_width += intval($rConfig['offsets'][$breakpoint]);
+            }
             $_resizedImg = $this->resizeImg($imageUrl, $_width);
 
             if($rConfig['retina']) {
@@ -140,7 +143,7 @@ class Danjulf_Respizr_Helper_Data extends Mage_Core_Helper_Abstract
      * Gets image paths from Url
      *
      * @param string $imgUrl
-     * @return mixed
+     * @return string|false
      */
     public function getImgPathsFromUrl($imgUrl)
     {
@@ -170,13 +173,14 @@ class Danjulf_Respizr_Helper_Data extends Mage_Core_Helper_Abstract
      * @param string $imageUrl
      * @param int $alt
      * @param int $maxWidth
-     * @return mixed
+     * @param array $overrides
+     * @return string|false
      */
-    public function getPictureHtml($imageUrl, $alt, $maxWidth)
+    public function getPictureHtml($imageUrl, $alt, $maxWidth, $overrides = null)
     {
         if (!$imageUrl || !$maxWidth) { return false; }
 
-        $rConfig    = $this->getResponsiveConfig($maxWidth);
+        $rConfig    = $this->getResponsiveConfig($maxWidth, $overrides);
         $images     = $this->resizeImages($rConfig, $imageUrl);
 
         return $this->preparePictureHtml($rConfig, $images, $alt);
@@ -189,13 +193,14 @@ class Danjulf_Respizr_Helper_Data extends Mage_Core_Helper_Abstract
      * @param Mage_Catalog_Model_Product $product
      * @param string $attributeName
      * @param int $maxWidth
-     * @return mixed
+     * @return string|false
      */
-    public function getProductPictureHtml(Mage_Catalog_Model_Product $product, $attributeName, $maxWidth)
+    public function getProductPictureHtml(Mage_Catalog_Model_Product $product,
+        $attributeName, $maxWidth, $overrides = null)
     {
         if (!$product || !$attributeName || !$maxWidth) { return false; }
 
-        $rConfig    = $this->getResponsiveConfig($maxWidth);
+        $rConfig    = $this->getResponsiveConfig($maxWidth, $overrides);
         $images     = $this->resizeProductImages($rConfig, $product, $attributeName);
 
         return $this->preparePictureHtml($rConfig, $images, '');
@@ -207,11 +212,11 @@ class Danjulf_Respizr_Helper_Data extends Mage_Core_Helper_Abstract
      * @param array $rConfig
      * @param array $images
      * @param string $alt
-     * @return mixed
+     * @return string|false
      */
     public function preparePictureHtml($rConfig, $images, $alt)
     {
-        if (!$rConfig || !count($images) > 0) { return false; }
+        if (!$rConfig || !count($images) > 0){ return false; }
 
         $smallestImg    = $images[$rConfig['breakpoints'][count($rConfig['breakpoints']) - 1]];
         $largestImg     = $images[$rConfig['breakpoints'][0]];
@@ -244,8 +249,10 @@ class Danjulf_Respizr_Helper_Data extends Mage_Core_Helper_Abstract
         /* @var $helper Mage_Catalog_Helper_Image */
 
         foreach ($rConfig['breakpoints'] as $breakpoint) {
-            $_width = intval($breakpoint * $rConfig['multiplier']
-                + $rConfig['offsets'][$breakpoint]);
+            $_width = intval($breakpoint * $rConfig['multiplier']);
+            if (array_key_exists($breakpoint, $rConfig['offsets'])){
+                $_width += intval($rConfig['offsets'][$breakpoint]);
+            }
 
             $viConfig = Mage::getSingleton('respizr/config')->getRespizrVarienImageSettings();
             $_resizedImg = (string)$helper->init($product, $attributeName)
@@ -283,9 +290,10 @@ class Danjulf_Respizr_Helper_Data extends Mage_Core_Helper_Abstract
      * Retrieves responsive configuration for a specified width
      *
      * @param int $width
+     * @param array $overrides
      * @return array
      */
-    public function getResponsiveConfig($width)
+    public function getResponsiveConfig($width, $overrides = null)
     {
         $rConfig = array();
         $layoutCode = $this->getLayoutCode();
@@ -294,6 +302,17 @@ class Danjulf_Respizr_Helper_Data extends Mage_Core_Helper_Abstract
         $rConfig['offsets']     = Mage::getSingleton('respizr/config')->getRespizrOffsets($layoutCode);
         $rConfig['multiplier']  = $width / max($rConfig['breakpoints']);
         $rConfig['retina']      = Mage::getSingleton('respizr/config')->isRespizrRetina();
+
+        // Override predifined breakpoints with inline overrides:
+        if ($overrides){
+            foreach ($overrides as $breakpoint => $offset){
+                if (!in_array($breakpoint, $rConfig['breakpoints'])){
+                    array_push($rConfig['breakpoints'], $breakpoint);
+                    arsort($rConfig['breakpoints']);
+                }
+                $rConfig['offsets'][$breakpoint] = intval($offset);
+            }
+        }
 
         return $rConfig;
     }
