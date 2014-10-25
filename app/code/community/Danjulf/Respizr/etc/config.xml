@@ -31,7 +31,7 @@
 
     <modules>
         <Danjulf_Respizr>
-            <version>0.0.2</version>
+            <version>0.0.5</version>
         </Danjulf_Respizr>
     </modules>
 
@@ -91,6 +91,14 @@
                 <breakpoints><![CDATA[1200, 960]]></breakpoints>
                 <layout_offsets></layout_offsets>
             </general>
+            <varien_image>
+                <quality><![CDATA[75]]></quality>
+                <background_color><![CDATA[255, 255, 255]]></background_color>
+                <keep_aspect_ratio>0</keep_aspect_ratio>
+                <keep_frame>0</keep_frame>
+                <keep_transparency>1</keep_transparency>
+                <constrain_only>1</constrain_only>
+            </varien_image>
         </respizr>
     </default>
 

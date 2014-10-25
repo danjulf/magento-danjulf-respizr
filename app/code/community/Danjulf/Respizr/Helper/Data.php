@@ -59,10 +59,16 @@ class Danjulf_Respizr_Helper_Data extends Mage_Core_Helper_Abstract
 
         if (file_exists($originalPath) && is_file($originalPath)) {
             if (!file_exists($resizedImagePath)) {
+                $viConfig = Mage::getSingleton('respizr/config')->getRespizrVarienImageSettings();
                 $imageObj = new Varien_Image($originalPath);
-                $imageObj->constrainOnly(TRUE);
-                $imageObj->keepAspectRatio(FALSE);
-                $imageObj->keepFrame(FALSE);
+
+                $imageObj->quality($viConfig['quality']);
+                $imageObj->keepAspectRatio($viConfig['keep_aspect_ratio']);
+                $imageObj->keepFrame($viConfig['keep_frame']);
+                $imageObj->keepTransparency($viConfig['keep_transparency']);
+                $imageObj->constrainOnly($viConfig['constrain_only']);
+                $imageObj->backgroundColor($viConfig['background_color']);
+
                 $imageObj->resize($width, $height);
                 $imageObj->save($resizedImagePath);
             }
@@ -83,14 +89,16 @@ class Danjulf_Respizr_Helper_Data extends Mage_Core_Helper_Abstract
      * @param string $imageUrl
      * @return mixed
      */
-    public function resizeImages($rConfig, $imageUrl) {
+    public function resizeImages($rConfig, $imageUrl)
+    {
 
         if (empty($rConfig) || empty($imageUrl)) { return false; }
 
         $images = array();
 
         foreach ($rConfig['breakpoints'] as $breakpoint) {
-            $_width = intval($breakpoint * $rConfig['multiplier']);
+            $_width = intval($breakpoint * $rConfig['multiplier']
+                + $rConfig['offsets'][$breakpoint]);
             $_resizedImg = $this->resizeImg($imageUrl, $_width);
 
             if($rConfig['retina']) {
@@ -229,16 +237,35 @@ class Danjulf_Respizr_Helper_Data extends Mage_Core_Helper_Abstract
      * @param string $attributeName
      * @return array
      */
-    public function resizeProductImages($rConfig, Mage_Catalog_Model_Product $product, $attributeName) {
+    public function resizeProductImages($rConfig, Mage_Catalog_Model_Product $product, $attributeName)
+    {
         $images = array();
         $helper = Mage::helper('catalog/image');
+        /* @var $helper Mage_Catalog_Helper_Image */
 
         foreach ($rConfig['breakpoints'] as $breakpoint) {
-            $_width = intval($breakpoint * $rConfig['multiplier']);
-            $_resizedImg = (string)$helper->init($product, $attributeName)->keepFrame(true)->resize($_width);
+            $_width = intval($breakpoint * $rConfig['multiplier']
+                + $rConfig['offsets'][$breakpoint]);
 
-            if($rConfig['retina']) {
-                $_resizedImg2x = (string)$helper->init($product, $attributeName)->keepFrame(true)->resize($_width * 2);
+            $viConfig = Mage::getSingleton('respizr/config')->getRespizrVarienImageSettings();
+            $_resizedImg = (string)$helper->init($product, $attributeName)
+                ->setQuality($viConfig['quality'])
+                ->keepAspectRatio($viConfig['keep_aspect_ratio'])
+                ->keepFrame($viConfig['keep_frame'])
+                ->keepTransparency($viConfig['keep_transparency'])
+                ->constrainOnly($viConfig['constrain_only'])
+                ->backgroundColor($viConfig['background_color'])
+                ->resize($_width);
+
+            if ($rConfig['retina']) {
+                $_resizedImg2x = (string)$helper->init($product, $attributeName)
+                ->setQuality($viConfig['quality'])
+                ->keepAspectRatio($viConfig['keep_aspect_ratio'])
+                ->keepFrame($viConfig['keep_frame'])
+                ->keepTransparency($viConfig['keep_transparency'])
+                ->constrainOnly($viConfig['constrain_only'])
+                ->backgroundColor($viConfig['background_color'])
+                ->resize($_width * 2);
             }
 
             if ($_resizedImg) {
@@ -261,8 +288,10 @@ class Danjulf_Respizr_Helper_Data extends Mage_Core_Helper_Abstract
     public function getResponsiveConfig($width)
     {
         $rConfig = array();
+        $layoutCode = $this->getLayoutCode();
 
         $rConfig['breakpoints'] = Mage::getSingleton('respizr/config')->getRespizrBreakpoints();
+        $rConfig['offsets']     = Mage::getSingleton('respizr/config')->getRespizrOffsets($layoutCode);
         $rConfig['multiplier']  = $width / max($rConfig['breakpoints']);
         $rConfig['retina']      = Mage::getSingleton('respizr/config')->isRespizrRetina();
 
@@ -288,6 +317,26 @@ class Danjulf_Respizr_Helper_Data extends Mage_Core_Helper_Abstract
         ));
 
         return $imgBlock->toHtml();
+    }
+
+    /**
+     * Retrieve Pages Layout Code
+     *
+     * @return string|false
+     */
+    public function getLayoutCode()
+    {
+        $layoutTemplate = $this->getLayout()->getBlock('root')->getTemplate();
+        $pageLayouts    = Mage::getSingleton('page/config')->getPageLayouts();
+
+        foreach ($pageLayouts as $layout) {
+            if ($layout->getTemplate() === $layoutTemplate){
+                return $layout->getCode();
+                break;
+            }
+        }
+
+        return false;
     }
 
 }

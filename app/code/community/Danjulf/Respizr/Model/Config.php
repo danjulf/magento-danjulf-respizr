@@ -33,6 +33,13 @@ class Danjulf_Respizr_Model_Config
     const RESPIZR_RETINA        = 'respizr/general/retina';
     const RESPIZR_OFFSETS       = 'respizr/general/layout_offsets';
 
+    const RESPIZR_VI_QUALITY            = 'respizr/varien_image/quality';
+    const RESPIZR_VI_KEEP_ASPECT_RATIO  = 'respizr/varien_image/keep_aspect_ratio';
+    const RESPIZR_VI_KEEP_FRAME         = 'respizr/varien_image/keep_frame';
+    const RESPIZR_VI_KEEP_TRANSPARENCY  = 'respizr/varien_image/keep_transparency';
+    const RESPIZR_VI_CONSTRAIN_ONLY     = 'respizr/varien_image/constrain_only';
+    const BACKGROUND_COLOR              = 'respizr/varien_image/background_color';
+
     /**
      * Retrieve directory name for resized images
      *
@@ -81,4 +88,30 @@ class Danjulf_Respizr_Model_Config
             ? $offsets[$layoutCode]
             : array();
     }
+
+    /**
+     * Get Respizr settings for Varien_Image
+     *
+     * @return array
+     */
+    public function getRespizrVarienImageSettings()
+    {
+        $varienImageSettings = array();
+
+        $varienImageSettings['quality']
+            = Mage::getStoreConfig(self::RESPIZR_VI_QUALITY);
+        $varienImageSettings['keep_aspect_ratio']
+            = Mage::getStoreConfig(self::RESPIZR_VI_KEEP_ASPECT_RATIO);
+        $varienImageSettings['keep_frame']
+            = Mage::getStoreConfig(self::RESPIZR_VI_KEEP_FRAME);
+        $varienImageSettings['keep_transparency']
+            = Mage::getStoreConfig(self::RESPIZR_VI_KEEP_TRANSPARENCY);
+        $varienImageSettings['constrain_only']
+            = Mage::getStoreConfig(self::RESPIZR_VI_CONSTRAIN_ONLY);
+        $varienImageSettings['background_color']
+            = Mage::getStoreConfig(self::BACKGROUND_COLOR);
+
+        return $varienImageSettings;
+    }
+
 }
