@@ -25,12 +25,14 @@
  * @copyright 2014 Daniel Bergstrom (danjulf@gmail.com)
  * @license   http://www.gnu.org/licenses/lgpl.html GNU LGPL
  */
-
+?>
+<?php /* @see Dajulf_Respizr_Helper_Data */ ?>
+<?php /* @var $this Mage_Core_Block_Template */ ?>
+<?php
 $alt            = $this->getAlt();
 $images         = $this->getImages();
 $smallestImg    = $this->getSmallestImg();
 $largestImg     = $this->getLargestImg();
-
 ?>
 
 <picture data-alt="<?php echo $alt; ?>" data-default-src="<?php echo $largestImg['image_url']; ?>">

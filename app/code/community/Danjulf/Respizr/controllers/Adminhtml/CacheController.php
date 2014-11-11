@@ -30,7 +30,8 @@ require_once implode(DS, array(
     'Mage', 'Adminhtml', 'controllers', 'CacheController.php'
 ));
 
-class Danjulf_Respizr_Adminhtml_CacheController extends Mage_Adminhtml_CacheController
+class Danjulf_Respizr_Adminhtml_CacheController
+    extends Mage_Adminhtml_CacheController
 {
 
     /**
@@ -48,7 +49,9 @@ class Danjulf_Respizr_Adminhtml_CacheController extends Mage_Adminhtml_CacheCont
     public function clearRespizrImageCache()
     {
         $mediaPath = Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA);
-        $resizedDirPath = $mediaPath . DS . Mage::getSingleton('respizr/config')->getRespizrDirName();
+        $resizedDirPath = $mediaPath . DS
+            . Mage::getSingleton('respizr/config')->getRespizrDirName();
+
         if (is_dir($resizedDirPath)) {
             $io = new Varien_Io_File();
             $io->rmdir($resizedDirPath, true);

@@ -33,6 +33,7 @@ class Danjulf_Respizr_Model_Adminhtml_System_Config_Backend_Offsets
     /**
      * Cast offsets to int before saving
      *
+     * @return void
      */
     protected function _beforeSave()
     {

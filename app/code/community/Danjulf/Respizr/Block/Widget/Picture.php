@@ -26,9 +26,8 @@
  * @license   http://www.gnu.org/licenses/lgpl.html GNU LGPL
  */
 
-class Danjulf_Respizr_Block_Widget_Picture
-    extends Mage_Core_Block_Template
-        implements Mage_Widget_Block_Interface
+class Danjulf_Respizr_Block_Widget_Picture extends Mage_Core_Block_Template
+    implements Mage_Widget_Block_Interface
 {
     /**
      *
@@ -38,8 +37,9 @@ class Danjulf_Respizr_Block_Widget_Picture
         $this->setTemplate('respizr/widget/picture.phtml');
 
         $this->addData(array(
-            'image_url' => Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA).$this->_getData('image')
+            'image_url' =>
+                Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA)
+                    . $this->_getData('image')
         ));
     }
-
 }
