@@ -110,9 +110,41 @@ class Danjulf_Respizr_Model_Config
         $varienImageSettings['constrain_only'] =
             Mage::getStoreConfig(self::RESPIZR_VI_CONSTRAIN_ONLY);
         $varienImageSettings['background_color'] =
-            Mage::getStoreConfig(self::RESPIZR_VI_BACKGROUND_COLOR);
+            $this->getBackgroundColor(false);
 
         return $varienImageSettings;
+    }
+
+    /**
+     * Get image background RGB color as an array or hex string.
+     *
+     * @param boolean $asHex
+     * @param Mage_Core_Model_Store|string|int|null $store
+     * @return array|string
+     */
+    public function getBackgroundColor($asHex = false, $store = null)
+    {
+        $string = Mage::getStoreConfig(
+            self::RESPIZR_VI_BACKGROUND_COLOR,
+            $store
+        );
+        $array = preg_split('/\s*,\s*/', $string, -1, PREG_SPLIT_NO_EMPTY);
+        $color = array();
+        for ($i = 0; $i < 3; ++$i) {
+            if (isset($array[$i])) {
+                $color[] = min(255, max(0, (int) $array[$i]));
+            } else {
+                $color[] = 255;
+            }
+        }
+        if ($asHex) {
+            $hexString = '';
+            foreach ($color as $c) {
+                $hexString .= sprintf('%02s', dechex($c));
+            }
+            return $hexString;
+        }
+        return $color;
     }
 
 }
