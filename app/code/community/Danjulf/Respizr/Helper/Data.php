@@ -311,7 +311,7 @@ class Danjulf_Respizr_Helper_Data extends Mage_Core_Helper_Abstract
         $rConfig['breakpoints'] = $config->getRespizrBreakpoints();
         $rConfig['offsets']     = $config->getRespizrOffsets($layoutCode);
         $rConfig['multiplier']  = $width / max($rConfig['breakpoints']);
-        $rConfig['retina']      = $config('respizr/config')->isRespizrRetina();
+        $rConfig['retina']      = $config->isRespizrRetina();
 
         // Override predifined breakpoints with inline overrides:
         if ($overrides) {
