@@ -182,13 +182,11 @@ class Danjulf_Respizr_Helper_Data extends Mage_Core_Helper_Abstract
     public function getPictureHtml($imageUrl, $alt, $maxWidth,
         $maxHeight = null, $overrides = null
     ) {
-        Mage::log('getPictureHtml', null, 'respizr.log');
         if (!$imageUrl || !$maxWidth) {
             return false;
         }
         $rConfig =
             $this->getResponsiveConfig($maxWidth, $maxHeight, $overrides);
-        Mage::log($rConfig, null, 'respizr.log');
         $images = $this->resizeImages($rConfig, $imageUrl);
 
         return $this->preparePictureHtml($rConfig, $images, $alt);
@@ -323,7 +321,6 @@ class Danjulf_Respizr_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function addVarienImageOptions(Varien_Image $image)
     {
-        Mage::log('addVarienImageOptions', null, 'respizr.log');
         $config = Mage::getSingleton('respizr/config');
         /* @var $config Danjulf_Respizr_Model_Config */
         $viSettings = $config->getRespizrVarienImageSettings();
