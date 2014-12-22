@@ -25,11 +25,13 @@
  * @copyright 2014 Daniel Bergstrom (danjulf@gmail.com)
  * @license   http://www.gnu.org/licenses/lgpl.html GNU LGPL
  */
-
 $alt            = $this->getAlt();
 $image          = $this->getImageUrl();
 $maxWidth       = $this->getMaxWidth();
-$pictureHtml    = $this->helper('respizr')->getPictureHtml($image, $alt, $maxWidth)
+$maxHeight      = $this->getMaxHeight();
+$pictureHtml    = $this->helper('respizr')->getPictureHtml(
+    $image, $alt, $maxWidth, $maxHeight
+);
 ?>
 
 <?php if ($pictureHtml): ?>
