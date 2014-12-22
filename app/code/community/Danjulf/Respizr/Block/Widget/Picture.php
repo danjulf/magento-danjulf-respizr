@@ -42,4 +42,19 @@ class Danjulf_Respizr_Block_Widget_Picture extends Mage_Core_Block_Template
                     . $this->_getData('image')
         ));
     }
+
+    /**
+     * Get Maximum Height
+     *
+     * @return string|null
+     */
+    public function getMaxHeight()
+    {
+        $maxHeight = $this->_getData('max_height');
+        if (intval($maxHeight) > 0) {
+            return $maxHeight;
+        }
+        return null;
+    }
+
 }

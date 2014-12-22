@@ -23,6 +23,12 @@
                 <visible>1</visible>
                 <required>0</required>
             </max_width>
+            <max_height translate="label">
+                <label>Max Height</label>
+                <type>text</type>
+                <visible>1</visible>
+                <required>0</required>
+            </max_height>
         </parameters>
     </widget_picture>
 </widgets>
