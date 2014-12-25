@@ -10,8 +10,8 @@ Enjoy!
 
 What's new?
 -----------
-- Offsets can be set both in config (per page layout) and inline
-- Varien Image settings in config
+- Now works with relative Url:s
+- Heights and height-calculation fixed
 
 Usage
 -----
@@ -37,3 +37,7 @@ There is a widget, to be able to add pictures to cms-content as well.
 Settings
 --------
 In System -> Configuration -> Respizr you can set your themes breakpoints and include offsets per page layout. You can also adjust settings for Varien Image (Quality, Keep Aspect Ratio, Background Color, Keep Frame, Keep Transparency, Constrain Only)
+
+Upcoming Features
+-----------------
+- Ability to change product image type ('small_image', 'thumbnail', etc) per breakpoint for product images.
