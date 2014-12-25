@@ -42,17 +42,16 @@ class Danjulf_Respizr_Helper_Data extends Mage_Core_Helper_Abstract
         if (empty($originalUrl) || empty($width)) {
             return false;
         }
-        $originalPaths = $this->getImgPathsFromUrl($originalUrl);
-        if (!$originalPaths) {
+        $paths = $this->getImgPathsFromUrl($originalUrl);
+        if (!$paths) {
             return false;
         }
-        $originalPath = $originalPaths['path'];
-        $relativePath = $originalPaths['relativePath'];
-        $resizedRelativePath =
-            $this->getResizedImgRelativePath($relativePath, $width, $height);
-        $mediaPath = Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA);
         $config = Mage::getSingleton('respizr/config');
         /* @var $config Danjulf_Respizr_Model_Config */
+        $mediaPath = Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+        $resizedRelativePath = $this->getResizedImgRelativePath(
+            $paths['relative'], $width, $height
+        );
 
         $resizedDirPath = $mediaPath . DS . $config->getRespizrDirName();
         if (!is_dir($resizedDirPath)) {
@@ -60,9 +59,9 @@ class Danjulf_Respizr_Helper_Data extends Mage_Core_Helper_Abstract
         }
 
         $resizedImagePath = $resizedDirPath . DS . $resizedRelativePath;
-        if (file_exists($originalPath) && is_file($originalPath)) {
+        if (file_exists($paths['full']) && is_file($paths['full'])) {
             if (!file_exists($resizedImagePath)) {
-                $image = new Varien_Image($originalPath);
+                $image = new Varien_Image($paths['full']);
                 $image = $this->addVarienImageOptions($image);
                 $image->resize($width, $height);
                 $image->save($resizedImagePath);
@@ -167,8 +166,8 @@ class Danjulf_Respizr_Helper_Data extends Mage_Core_Helper_Abstract
 
         foreach ($possibleUrls as $url => $path) {
             if (strpos($imgUrl, $url) !== false) {
-                $imgPath['path'] = str_replace($url, $path . DS, $imgUrl);
-                $imgPath['relativePath'] = str_replace($url, '', $imgUrl);
+                $imgPath['full'] = str_replace($url, $path . DS, $imgUrl);
+                $imgPath['relative'] = str_replace($url, '', $imgUrl);
                 return $imgPath;
             }
         }
@@ -317,28 +316,32 @@ class Danjulf_Respizr_Helper_Data extends Mage_Core_Helper_Abstract
         /* @var $helper Mage_Catalog_Helper_Image */
         $resizedImage = $helper->init($product, $attributeName);
         $resizedImage = $this->addVarienImageOptions($resizedImage);
-        $resizedImage->resize($width);
+        $resizedImage->resize($width, $height);
 
-        return (string) $resizedImage;
+        return (string)$resizedImage;
     }
 
     /**
      * Add Varien Image options set in Respizr Config
      *
-     * @param Varien_Image $image
-     * @return Varien_Image $image
+     * @param Varien_Image|Mage_Catalog_Helper_Image $image
+     * @return Varien_Image|Mage_Catalog_Helper_Image $image
      */
-    public function addVarienImageOptions(Varien_Image $image)
+    public function addVarienImageOptions($image)
     {
         $config = Mage::getSingleton('respizr/config');
         /* @var $config Danjulf_Respizr_Model_Config */
         $viSettings = $config->getRespizrVarienImageSettings();
 
         if (isset($viSettings['quality'])) {
-            $image->quality(max(10, (int) $viSettings['quality']));
+            if (Get_class($image) === 'Mage_Catalog_Helper_Image') {
+                $image->setQuality(max(10, (int) $viSettings['quality']));
+            } else {
+                $image->quality(max(10, (int) $viSettings['quality']));
+            }
         }
         if (isset($viSettings['keep_transparency'])) {
-            $image->keepTransparency(!!$viSettings['keep_transparency']);
+           $image->keepTransparency(!!$viSettings['keep_transparency']);
         }
         if (isset($viSettings['keep_aspect_ratio'])) {
             $image->keepAspectRatio(!!$viSettings['keep_aspect_ratio']);
