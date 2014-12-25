@@ -103,9 +103,15 @@ class Danjulf_Respizr_Helper_Data extends Mage_Core_Helper_Abstract
             }
             $_resizedImg = $this->resizeImg($imageUrl, $_width, $_height);
             if ($rConfig['retina']) {
-                $_resizedImg2x = $this->resizeImg(
-                    $imageUrl, $_width * 2, $_height * 2
-                );
+                if ($_height) {
+                    $_resizedImg2x = $this->resizeImg(
+                        $imageUrl, $_width * 2, $_height * 2
+                    );
+                } else {
+                    $_resizedImg2x = $this->resizeImg(
+                        $imageUrl, $_width * 2
+                    );
+                }
             }
             if ($_resizedImg) {
                 $images[$breakpoint] = array('image_url' => $_resizedImg);
@@ -145,14 +151,18 @@ class Danjulf_Respizr_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function getImgPathsFromUrl($imgUrl)
     {
-        $mediaUrl   = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
-        $skinUrl    = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_SKIN);
-        $mediaPath  = Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA);
-        $skinPath   = Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_SKIN);
+        $mediaUrl = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+        $relativeMediaUrl = '/' . Mage_Core_Model_Store::URL_TYPE_MEDIA . '/';
+        $skinUrl = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_SKIN);
+        $relativeSkinUrl = '/' . Mage_Core_Model_Store::URL_TYPE_SKIN . '/';
+        $mediaPath = Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+        $skinPath = Mage::getBaseDir(Mage_Core_Model_Store::URL_TYPE_SKIN);
 
         $possibleUrls = array(
-            $mediaUrl   => $mediaPath,
-            $skinUrl    => $skinPath
+            $mediaUrl           => $mediaPath,
+            $relativeMediaUrl   => $mediaPath,
+            $skinUrl            => $skinPath,
+            $relativeSkinUrl    => $skinPath,
         );
 
         foreach ($possibleUrls as $url => $path) {
@@ -178,13 +188,11 @@ class Danjulf_Respizr_Helper_Data extends Mage_Core_Helper_Abstract
     public function getPictureHtml($imageUrl, $alt, $maxWidth,
         $maxHeight = null, $overrides = null
     ) {
-        Mage::log('getPictureHtml', null, 'respizr.log');
         if (!$imageUrl || !$maxWidth) {
             return false;
         }
         $rConfig =
             $this->getResponsiveConfig($maxWidth, $maxHeight, $overrides);
-        Mage::log($rConfig, null, 'respizr.log');
         $images = $this->resizeImages($rConfig, $imageUrl);
 
         return $this->preparePictureHtml($rConfig, $images, $alt);
@@ -269,12 +277,19 @@ class Danjulf_Respizr_Helper_Data extends Mage_Core_Helper_Abstract
             if (isset($rConfig['height_multiplier'])) {
                 $_height = intval($_width * $rConfig['height_multiplier']);
             }
-            $_resizedImg =
-                $this->resizeProductImage($product, $attributeName, $width);
+            $_resizedImg = $this->resizeProductImage(
+                $product, $attributeName, $_width, $_height
+            );
             if ($rConfig['retina']) {
-                $_resizedImg2x = $this->resizeProductImage(
-                    $product, $attributeName, $width * 2
-                );
+                if ($_height) {
+                    $_resizedImg2x = $this->resizeProductImage(
+                        $product, $attributeName, $_width * 2, $_height * 2
+                    );
+                } else {
+                    $_resizedImg2x = $this->resizeProductImage(
+                        $product, $attributeName, $_width * 2
+                    );
+                }
             }
             if ($_resizedImg) {
                 $images[$breakpoint] = array('image_url' => $_resizedImg);
@@ -315,7 +330,6 @@ class Danjulf_Respizr_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function addVarienImageOptions(Varien_Image $image)
     {
-        Mage::log('addVarienImageOptions', null, 'respizr.log');
         $config = Mage::getSingleton('respizr/config');
         /* @var $config Danjulf_Respizr_Model_Config */
         $viSettings = $config->getRespizrVarienImageSettings();
