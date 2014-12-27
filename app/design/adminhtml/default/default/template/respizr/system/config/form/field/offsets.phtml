@@ -30,6 +30,7 @@
 <?php
 $_htmlId = $this->getHtmlId() ? $this->getHtmlId() : '_' . uniqid();
 $_disabled = $this->getElement()->getDisabled();
+$_imageTypes = $this->getImageTypes();
 ?>
 <div class="grid" id="grid<?php echo $_htmlId ?>">
     <table cellpadding="0" cellspacing="0" id="table<?php echo $_htmlId ?>">
@@ -38,6 +39,7 @@ $_disabled = $this->getElement()->getDisabled();
                 <th><?php echo $this->__('Layout'); ?></th>
                 <th><?php echo $this->__('Breakpoint'); ?></th>
                 <th class="last"><?php echo $this->__('Offset'); ?></th>
+                <th class="last"><?php echo $this->__('Product Image'); ?></th>
             </tr>
         </thead>
         <tbody>
@@ -45,7 +47,7 @@ $_disabled = $this->getElement()->getDisabled();
                 <?php $i = 0; foreach ($offsets as $breakpoint => $offset): ?>
                 <tr>
                     <?php if ($i == 0): ?>
-                    <td class="nowrap" rowspan="<?php echo count($offsets); ?>)">
+                    <td rowspan="<?php echo count($offsets); ?>)">
                         <?php echo $this->getLayoutLabel($layoutCode); ?>
                     </td>
                     <?php endif; ?>
@@ -57,9 +59,21 @@ $_disabled = $this->getElement()->getDisabled();
                                class="input-text"
                                name="<?php echo $this->getInputName($layoutCode, $breakpoint); ?>"
                                value="<?php echo $offset; ?>"
+                               style="width: 40px;"
                                <?php if ($_disabled): ?>
                                disabled="disabled"
                                <?php endif; ?> />
+                    </td>
+                    <td>
+                        <select
+                            style="width: 100px;">
+                            <option value="">Default</option>
+                            <?php foreach ($_imageTypes as $imageTypeCode => $imageTypeLabel): ?>
+                                <option value="<?php echo $imageTypeCode; ?>">
+                                    <?php echo $imageTypeLabel; ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
                     </td>
                 </tr>
                 <?php ++$i; endforeach; ?>

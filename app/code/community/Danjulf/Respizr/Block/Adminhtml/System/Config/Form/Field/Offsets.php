@@ -57,9 +57,8 @@ class Danjulf_Respizr_Block_Adminhtml_System_Config_Form_Field_Offsets
      * @param Varien_Data_Form_Element_Abstract $element
      * @return string
      */
-    protected function _getElementHtml(
-        Varien_Data_Form_Element_Abstract $element
-    ) {
+    protected function _getElementHtml(Varien_Data_Form_Element_Abstract $element)
+    {
         $this->setElement($element);
         $html = $this->_toHtml();
         return $html;
@@ -207,5 +206,46 @@ class Danjulf_Respizr_Block_Adminhtml_System_Config_Form_Field_Offsets
             $layoutCode,
             $breakpoint
         );
+    }
+
+    /**
+     * Retrieve Product Image Types
+     *
+     * @return array
+     */
+    public function getImageTypes()
+    {
+        $imageTypes = array();
+        foreach ($this->getMediaAttributes() as $attribute) {
+            /* @var $attribute Mage_Eav_Model_Entity_Attribute */
+            $imageTypes[$attribute->getAttributeCode()] =
+                $attribute->getFrontend()->getLabel();
+        }
+        return $imageTypes;
+    }
+
+    /**
+     * Retrieve Product Media Image Attributes
+     *
+     * @return array
+     */
+    public function getMediaAttributes()
+    {
+        if (!$this->hasMediaAttributes()) {
+            $mediaAttributes = array();
+            $productAttributes =
+                Mage::getResourceModel('catalog/product_attribute_collection');
+            foreach ($productAttributes as $attribute) {
+                /* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
+                if ($attribute->getFrontend()->getInputType() ==
+                    'media_image'
+                ) {
+                    $mediaAttributes[$attribute->getAttributeCode()] =
+                        $attribute;
+                }
+                $this->setMediaAttributes($mediaAttributes);
+            }
+        }
+        return $this->getData('media_attributes');
     }
 }
