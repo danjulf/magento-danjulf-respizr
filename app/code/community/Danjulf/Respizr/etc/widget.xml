@@ -6,7 +6,6 @@
         <parameters>
             <image translate="label">
                 <label>Image</label>
-                <description>Promotion image</description>
                 <visible>1</visible>
                 <required>1</required>
                 <type>respizr/adminhtml_widget_form_renderer_fieldset_image</type>
@@ -21,7 +20,7 @@
                 <label>Max Width</label>
                 <type>text</type>
                 <visible>1</visible>
-                <required>0</required>
+                <required>1</required>
             </max_width>
             <max_height translate="label">
                 <label>Max Height</label>

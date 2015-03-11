@@ -30,16 +30,14 @@ class Danjulf_Respizr_Block_Widget_Picture extends Mage_Core_Block_Template
     implements Mage_Widget_Block_Interface
 {
     /**
-     *
+     * Constructor
      */
     protected function _construct()
     {
         $this->setTemplate('respizr/widget/picture.phtml');
-
+        $imageUrl = $this->_getData('image');
         $this->addData(array(
-            'image_url' =>
-                Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA)
-                    . $this->_getData('image')
+            'image_url' => $imageUrl
         ));
     }
 

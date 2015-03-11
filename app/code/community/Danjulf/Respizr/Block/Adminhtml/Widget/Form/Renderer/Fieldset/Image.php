@@ -42,7 +42,8 @@ class Danjulf_Respizr_Block_Adminhtml_Widget_Form_Renderer_Fieldset_Image
         if ($element->getValue()) {
 
             // Add image preview.
-            $url = $element->getValue();
+            $url = Mage::getStoreConfig('web/unsecure/base_url') .
+                $element->getValue();
 
             if (!preg_match("/^http\:\/\/|https\:\/\//", $url)) {
                 $url = Mage::getBaseUrl('media') . $url;
