@@ -31,7 +31,7 @@
 
     <modules>
         <Danjulf_Respizr>
-            <version>0.0.6</version>
+            <version>0.0.7</version>
         </Danjulf_Respizr>
     </modules>
 
@@ -50,6 +50,11 @@
             <respizr>
                 <class>Danjulf_Respizr_Model</class>
             </respizr>
+            <widget>
+                <rewrite>
+                    <widget>Danjulf_Respizr_Model_Widget</widget>
+                </rewrite>
+            </widget>
         </models>
     </global>
 
